@@ -20,32 +20,32 @@ export const Home = () => {
   return (
     <div>
       <section className='max-w-7xl mx-auto'>
+        
         <div>
-
           <h1>
             Les créations de notre communautée
           </h1>
           <p className='mt-2'>
             Parcourir les collections de l'imaginaire auxquelles DALL-E donne vie
           </p>
+        </div>
 
-          <div className='mt-16'>
-            <FormField />
-          </div>
+        <div className='mt-16'>
+          <FormField />
+        </div>
 
-          <div>
-            { search && (
-              <h2>Montrer les résultats pour <span>{search}</span></h2>
-            )}
+        <div>
+          { search && (
+            <h2>Montrer les résultats pour <span>{search}</span></h2>
+          )}
 
-            <div className='grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3'>
+           <div className='grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3'>
               {search ? (
                 <renderCards data={[]} title="Pas de résultats" />
               ): (
                 <renderCards data={[]} title="Aucun post trouvé"/>
               )}
             </div>
-          </div>
         </div>
       </section>
     </div>
