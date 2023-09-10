@@ -9,8 +9,26 @@ export const CreatePost = () => {
   const navigate = useNavigate()
   const [form, setForm] = useState({name:"", prompt:"", photo:""})
 
-  const generateImage = () => {
-    
+  const generateImage = async() => {
+    if(form.prompt) {
+      try {
+        const response = await fetch(`http:localhost:8000/api/dalle`, {
+          method:"POST",
+          headers: {
+            "Content-type": "application.json"
+          },
+          body: JSON.stringify({prompt: form.prompt}),
+        })
+
+        const data = await response.json()
+
+        setForm[{...form, photo: `data:image/jpeg;base64, ${data.photo}`}]
+      } catch (err) {
+        alert(err)
+      }
+    } else {
+      alert("Veuillez entrer une prompt")
+    }
   }
 
   const handleSubmit = () => {
