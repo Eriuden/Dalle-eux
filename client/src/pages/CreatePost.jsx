@@ -31,8 +31,27 @@ export const CreatePost = () => {
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async(e) => {
+    e.preventDefaut()
 
+    if(form.prompt && form.photo) {
+      try {
+        const response = await fetch(`http:localhost:8080/api/post`, {
+          method:"POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(form)
+        })
+
+        await response.json()
+        navigate("/")
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      alert("Veuillez entrer une prompt")
+    }
   }
 
   const handleChange = (e) => {
