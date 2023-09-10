@@ -3,18 +3,55 @@ import { Card } from '../components/Card'
 import { FormField } from '../components/formField'
 
 
+export const renderCards = ({data, title}) => {
+  if(data?.length > 0) {
+    return data.map((post) => 
+    <Card key={post.id} {...post}/>)
+  }
+
+  return <h2>{title}</h2>
+}
+
 export const Home = () => {
 
   const [posts, setPosts] = useState(null)
   const [search, setSearch] = useState("second")
+  const [results, setResults] = useState(null)
+  const [searchTimeOut, setSearchTimeOut] = useState(null)
 
-  const renderCards = ({data, title}) => {
-    if(data?.length > 0) {
-      return data.map((post) => 
-      <Card key={post.id} {...post}/>)
+  useEffect(()=> {
+    const fetchPosts = async() => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/post`, {
+          method:"GET",
+          headers: {
+            "Content-type": "application/json"
+          },
+        })
+
+        if (response.ok) {
+          const result = await response.json()
+          setPosts(result.data.reverse())
+        }
+      } catch (err) {
+        window.alert(err)
+      }
     }
+    fetchPosts()
+  }, [])
 
-    return <h2>{title}</h2>
+  const handleSearchChange = (e)=> {
+    setSearch(e.target.value)
+
+    setSearchTimeOut(
+      setTimeout(()=> {
+        const results = posts.filter((item)=> item.name.toLowerCase().includes(
+          search.toLowerCase()) || item.prompt.toLowerCase().includes
+          (search.toLowerCase()))
+        setSearch(results)
+      }, 500)
+    )
+    
   }
 
   return (
@@ -31,7 +68,12 @@ export const Home = () => {
         </div>
 
         <div className='mt-16'>
-          <FormField />
+          <FormField labelName="Rechercher"
+          type="text"
+          name="text"
+          placeholder="Rechercher"
+          value={search}
+          handleChange={handleSearchChange} />
         </div>
 
         <div>
@@ -43,7 +85,7 @@ export const Home = () => {
               {search ? (
                 <renderCards data={[]} title="Pas de résultats" />
               ): (
-                <renderCards data={[]} title="Aucun post trouvé"/>
+                <renderCards data={posts} title="Aucun post trouvé"/>
               )}
             </div>
         </div>
