@@ -16,8 +16,6 @@ export const Home = () => {
 
   const [posts, setPosts] = useState(null)
   const [search, setSearch] = useState("second")
-  const [results, setResults] = useState(null)
-  const [searchTimeOut, setSearchTimeOut] = useState(null)
 
   useEffect(()=> {
     const fetchPosts = async() => {
